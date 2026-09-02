@@ -274,3 +274,136 @@
 ;; todo CAN I create validator that can check input
 (comment
   )
+
+
+; 10. State History
+;
+;Every change should also be stored in a history vector.
+;
+;Example:
+;
+;{:current 42
+; :history [0 5 12 42]}
+;
+;Challenge yourself to keep the history consistent.
+
+(def state-history (atom {:current  1
+                          :history [0]}))
+
+(defn change [state value]
+  (swap! state (fn [state new-value]
+                 (let [current (:current state)]
+                   (if (= current new-value)
+                     state
+                     (-> state
+                         (assoc :current new-value)
+                         (update :history conj new-value)))))
+         value))
+
+(comment
+  (change state-history 12)
+  (change state-history 13)
+  )
+
+;11. Watchers
+;
+;Add one or more watches to an atom.
+;
+;The watches should:
+;
+;log every state change
+;count how many updates occurred
+;detect when a specific value appears
+;
+
+(def my-state (atom 0))
+(def my-state-counter (atom 0))
+
+(add-watch my-state
+           :logger (fn [key ref old-state new-state]
+                     (println "Change from" old-state "to " new-state)))
+
+(add-watch my-state
+           :counter (fn [key ref old-state new-state]
+                      (swap! my-state-counter inc)))
+
+(add-watch my-state
+           :detect-12 (fn [key ref old-state new-state]
+                        (when (= 12 new-state)
+                          (println "Detected 12"))))
+
+(comment
+  (swap! my-state inc)
+  (prn @my-state-counter))
+
+;13. Rate Limiter
+;
+;Store:
+;
+;{:requests [...]
+; :blocked? false}
+;
+;Design a rate limiter that:
+;
+;records request timestamps
+;blocks after N requests within one minute
+;automatically allows requests again after the window expires
+
+
+
+
+
+;14. In-Memory Session Store
+;
+;Maintain sessions:
+;
+;{session-id
+; {:user-id 123
+;  :expires-at ...}}
+;
+;Implement:
+;
+;create session
+;refresh expiration
+;delete session
+;remove expired sessions
+
+
+;15. Event Store
+;
+;Every update generates an immutable event.
+;
+;Example:
+;
+;{:state ...
+; :events [...]}
+;
+;Design operations that append events while updating the current state.
+;
+;Think about event ordering and immutability.
+;
+;16. Concurrent Leaderboard
+;
+;Hundreds of threads update player scores simultaneously.
+;
+;Requirements:
+;
+;no lost updates
+;efficient reads
+;ability to retrieve the top 10 players
+;
+;Consider how your data structure affects performance.
+;
+;17. Publish/Subscribe System
+;
+;Use an atom to manage subscribers.
+;
+;Subscribers should be functions.
+;
+;Implement:
+;
+;subscribe
+;unsubscribe
+;publish an event to all subscribers
+;
+;Bonus: think about what happens if a subscriber throws an exception.

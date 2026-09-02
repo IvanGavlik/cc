@@ -16,5 +16,4 @@ tasks (not solution)
 * stao d
 
 ## TODO learning
-* atom teorija poceo
 * TODO taskovi
