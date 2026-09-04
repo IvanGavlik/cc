@@ -336,6 +336,7 @@
   (swap! my-state inc)
   (prn @my-state-counter))
 
+
 ;13. Rate Limiter
 ;
 ;Store:
@@ -349,8 +350,34 @@
 ;blocks after N requests within one minute
 ;automatically allows requests again after the window expires
 
+(def rate-limiter (atom {:requests [{:id 1
+                                     :timestamp (java.time.LocalTime/now)}
+                                    {:id 2
+                                     :timestamp (java.time.LocalTime/now)}
+                                    {:id 3
+                                     :timestamp (java.time.LocalTime/now)}]
+                         :blocked? false}))
+
+(defn record-request [rate-limiter request]
+  (swap! rate-limiter
+         (fn [rate-limiter request]
+           (let [t1       (:timestamp (first (:requests rate-limiter)))
+                 tn       (:timestamp request)
+                 blocked? (> 60 (.getSeconds (java.time.Duration/between t1 tn)))]
+             (if blocked?
+               (assoc rate-limiter :blocked? true)
+               (-> rate-limiter
+                   (update :requests
+                           (fn [old new]
+                             (vec (rest (conj old new))))
+                           request)
+                   (assoc :blocked? false))))) request))
 
 
+(comment
+  (record-request rate-limiter {:id 4
+                                :timestamp (java.time.LocalTime/now)})
+  )
 
 
 ;14. In-Memory Session Store
