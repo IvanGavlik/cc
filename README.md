@@ -13,7 +13,8 @@ tasks (not solution)
 * Schema / Mall
 
 ## TODO clacisifaction
-* stao d
+* stao d defprotocol
 
 ## TODO learning
 * TODO taskovi
+* https://chatgpt.com/share/6a9e98d1-b31c-83ed-b423-e86fd61f39aa

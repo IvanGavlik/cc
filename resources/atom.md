@@ -105,3 +105,5 @@ So One independent value (it can be map)? Use an atom.
 
 ## TODO
 * how they are implemented look into implementatoin
+* validation
+* watcher 

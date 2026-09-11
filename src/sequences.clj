@@ -20,3 +20,5 @@
 ; counted?  Returns true if coll implements count in constant time
 
 ; cycle  Returns a lazy (infinite!) sequence of repetitions of the items in coll.
+
+; (dedupe)
