@@ -163,7 +163,25 @@
 ;
 ;The goal is to practice creating a dispatch function that returns something more complex than a single keyword.
 
+(defmulti calculate-shipping
+          (fn [method customer-type address] {:method method :type customer-type}))
 
+(defmethod calculate-shipping {:method :standard :type :regular} [_ _ address]
+  (prn "standard regular shipping to " address))
+
+(defmethod calculate-shipping {:method :express :type :regular} [_ _ address]
+  (prn "express regular shipping to " address))
+
+(defmethod calculate-shipping {:method :standard :type :premium} [_ _ address]
+  (prn "standard premium shipping to " address))
+
+(defmethod calculate-shipping {:method :express :type :premium} [_ _ address]
+  (prn "express premium shipping to " address))
+
+(comment
+  (calculate-shipping :standard :regular "some random addres 1")
+  (calculate-shipping :express :premium "some random addres 1")
+  ())
 
 ;Task 17 — User Role Hierarchy
 ;
@@ -186,6 +204,31 @@
 ;administrators
 ;unknown roles
 
+(defmulti can-access? (fn [user _] user))
+
+(defmethod can-access? :role/user [_ resources]
+  (prn "you have read only access to the " resources))
+
+(defmethod can-access? :role/moderator [_ resources]
+  (prn "you have read only and write only access to the " resources))
+
+(defmethod can-access? :role/admin [_ resources]
+  (prn "you have admin access to the " resources))
+
+(defmethod can-access? :default [_ _]
+  (prn "dont know you no access for you"))
+
+(comment
+  (derive :role/moderator :role/user)
+  (can-access? :role/user "/some-resources")
+  (can-access? :role/admin "/some-resources")
+
+  (derive :role/test :role/user)
+  (can-access? :role/test "/some-resources")
+  (can-access? :role/test-2 "/some-resources")
+
+
+  ())
 
 
 ;Task 25 — Rate Limiter Strategy
