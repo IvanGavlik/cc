@@ -245,3 +245,47 @@
 ;The rate limiter should receive a request and configuration.
 ;
 ;The dispatch mechanism should select the appropriate strategy.
+
+(defmulti rate-limit (fn [_ config] (:strategy config)))
+
+(def fixed-window-counter (atom {:counter 12}))
+
+(defmethod rate-limit :fixed-window [request config]
+  (prn "fixed window rate limit")
+  (let [limit (:limit config)]
+    (swap! fixed-window-counter
+           (fn [{:keys [counter]} limit]
+             (let [now (java.time.LocalTime/now)
+                   start-minute (java.time.LocalTime/now)   ; todo start minute
+                   start-again (> 60 (.getSeconds (java.time.Duration/between now start-minute)))]))
+           limit)))
+
+(comment
+  (rate-limit {:my-request "1"} {:strategy :fixed-window
+                                 :limit 10})
+  ())
+
+(defmethod rate-limit :sliding-window [request config]
+  (prn "sliding window rate limit"))
+
+(defmethod rate-limit :token-bucket [request config]
+  (prn "token-bucket rate limit"))
+
+(defmethod rate-limit :leaky-bucket [request config]
+  (prn "leaky-bucket rate limit"))
+
+(comment
+  (rate-limit {:my-request "1"} {:strategy :fixed-window
+                                 :limit 10})
+
+  (rate-limit {:my-request "1"} {:strategy :sliding-window
+                                 :limit 10})
+
+  (rate-limit {:my-request "1"} {:strategy :token-bucket
+                                 :capacity 10
+                                 :refill 2})
+
+  (rate-limit {:my-request "1"} {:strategy :leaky-bucket
+                                 :capacity 10
+                                 :rate 2})
+  )
