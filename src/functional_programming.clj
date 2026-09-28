@@ -10,3 +10,5 @@
 ; completing  Takes a reducing function f of 2 args and returns a fn suitable for transduce by adding an arity-1 sig
 
 ; constantly  Returns a function that takes any number of arguments and returns x.
+
+; dedupe

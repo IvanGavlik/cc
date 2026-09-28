@@ -4,7 +4,7 @@
 
 (def counter (atom 0))
 
-; The callbacks run as part of the update operation, so a slow watch makes swap! or reset! slowe
+; The callbacks run as part of the update operation, so a slow watch makes swap! or r; eset! slowe
 (add-watch counter :logger
            (fn [key ref old-state new-state]
              (println "Change from" old-state "to " new-state)))
@@ -431,6 +431,26 @@
 ;
 ;subscribe
 ;unsubscribe
-;publish an event to all subscribers
+;publish an event to all subscriberos
 ;
 ;Bonus: think about what happens if a subscriber throws an exception.
+
+
+                                        ; practice structural editing
+
+(defn greet [name]
+  (str "Hello, " name "!"))
+
+(defn add [a b]
+  (+ a b))
+
+(defn process [x]
+  (let [(doubled) (* x 2)
+        squared (* x x)]
+    (+ doubled squared)))
+
+(map inc [1 2 3 4 5])
+
+(-> {:a 1:b 2}
+    (assoc :c 3)
+    (dissoc :a))

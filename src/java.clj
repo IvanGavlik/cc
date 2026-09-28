@@ -17,3 +17,5 @@
 ; compare  Comparator. Returns a negative number, zero, or a positive number when x is logically 'less than', 'eq
 
 ; construct-proxy  Takes a proxy class and any arguments for its superclass ctor and creates and returns an instance of t
+
+; definterface

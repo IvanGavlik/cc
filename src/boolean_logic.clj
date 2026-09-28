@@ -19,4 +19,7 @@
 
 ;case  Takes an expression, and a set of clauses. Each clause can take the form of either: test-constant re
 
+; condp
+
 ; decimal?
+
