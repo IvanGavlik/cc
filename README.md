@@ -13,7 +13,7 @@ tasks (not solution)
 * Schema / Mall
 
 ## TODO clacisifaction
-* stao d defprotocol
+* stao d defrecord
 
 ## TODO learning
 * TODO taskovi
